@@ -1,4 +1,50 @@
 {% extends 'index.html' %} {% block title %}Sign Up{% endblock %}\ {% block
 content %}
-<h1>This is the Sign Up page</h1>
+
+<br />
+
+<form method="post" class="col-6">
+  <h3>Sign Up</h3>
+  <div class="form-group">
+    <label for="email">Email Address</label>
+    <input
+      type="email"
+      class="form-control"
+      name="email"
+      id="email"
+      placeholder="Enter email"
+    />
+
+    <label for="firstName">First Name</label>
+    <input
+      type="text"
+      class="form-control"
+      name="firstName"
+      id="firstName"
+      placeholder="Enter First Name"
+    />
+
+    <label for="password">Password</label>
+    <input
+      type="password"
+      class="form-control"
+      name="password"
+      id="password"
+      placeholder="Enter password"
+    />
+
+    <label for="passwordConfirmation">Password Confirmation</label>
+    <input
+      type="password"
+      class="form-control"
+      name="passwordConfirmation"
+      id="passwordConfirmation"
+      placeholder="Enter password confirmation"
+    />
+
+    <br />
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</form>
 {% endblock %}
