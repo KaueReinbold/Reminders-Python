@@ -1,4 +1,32 @@
 {% extends 'index.html' %} {% block title %}Log In{% endblock %}\ {% block
 content %}
-<h1>This is the Log In page</h1>
+
+<br />
+
+<form method="post" class="col-6">
+  <h3>Log In</h3>
+  <div class="form-group">
+    <label for="email">Email Address</label>
+    <input
+      type="email"
+      class="form-control"
+      name="email"
+      id="email"
+      placeholder="Enter email"
+    />
+
+    <label for="password">Password</label>
+    <input
+      type="password"
+      class="form-control"
+      name="password"
+      id="password"
+      placeholder="Enter password"
+    />
+
+    <br />
+
+    <button type="submit" class="btn btn-primary">Login</button>
+  </div>
+</form>
 {% endblock %}
