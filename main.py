@@ -4,4 +4,4 @@ app = create_app()
 
 if __name__ == '__main__':
     # HACK: Get environment from the .env file
-    app.run(debug=True)
+    app.run(debug=True, port=8000)

@@ -1,0 +1,11 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "python-website",
+      "database": "${workspaceFolder:python-website}/website/database.db"
+    }
+  ],
+  "sqltools.useNodeRuntime": true
+}
