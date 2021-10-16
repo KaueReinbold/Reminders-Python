@@ -1,23 +1,86 @@
 {% extends 'index.html' %} {% block title %}Home{% endblock %}\ {% block content
 %}
-<h1>Notes</h1>
-<ul class="list-group list-group-flush" id="~notes">
-  {% for note in user.notes %}
-  <li class="list-group-item">
-    {{ note.text }}
-    <button type="button" class="close" onClick="deleteNote({{ note.id }})">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </li>
 
-  {% endfor %}
-</ul>
-
-<form method="post">
-  <textarea class="form-control" name="note" id="note"></textarea>
-  <br />
-  <div>
-    <button type="submit" class="btn btn-primary">Add Note</button>
+<h2>Create Reminder</h2>
+<hr />
+<div class="row">
+  <div class="col-md-4">
+    <form method="post" id="formCreate">
+      <div class="form-group">
+        <label for="title" class="control-label">Title</label>
+        <input
+          name="title"
+          class="form-control"
+          maxlength="50"
+          placeholder="Type the title"
+        />
+      </div>
+      <div class="form-group">
+        <label for="description" class="control-label">Description</label>
+        <input
+          name="description"
+          class="form-control"
+          maxlength="150"
+          placeholder="Type the description"
+        />
+      </div>
+      <div class="form-group">
+        <label for="limit_date" class="control-label">Limit Date</label>
+        <input
+          name="limit_date"
+          class="form-control"
+          type="date"
+          placeholder="Select the limit date"
+        />
+      </div>
+      <div class="form-group">
+        <div class="checkbox">
+          <label>
+            Is Done?
+            <input name="is_done" type="checkbox" />
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-success" />
+      </div>
+    </form>
   </div>
-</form>
+</div>
+
+<h1>Reminders</h1>
+
+<table class="table" id="remindersTable">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Title</th>
+      <th scope="col">Description</th>
+      <th scope="col">Limit Date</th>
+      <th scope="col">Is Done?</th>
+      <th scope="col">#</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for reminder in user.reminders %}
+    <tr>
+      <td scope="row">{{ reminder.id }}</td>
+      <td>{{ reminder.title }}</td>
+      <td>{{ reminder.description }}</td>
+      <td>{{ reminder.limit_date.strftime('%m/%d/%Y') }}</td>
+      <td>{{ reminder.is_done }}</td>
+      <td>
+        <button
+          type="button"
+          class="close"
+          onClick="deleteReminder({{ reminder.id }})"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
 {% endblock %}
