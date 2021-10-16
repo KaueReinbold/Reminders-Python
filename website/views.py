@@ -24,7 +24,7 @@ def home():
         title = request.form.get('title')
         description = request.form.get('description')
         limit_date = validate_date(request.form.get('limit_date'))
-        is_done = request.form.get('is_done') or False
+        is_done = bool(request.form.get('is_done'))
 
         if len(title) < 1:
             flash('Title is too short!', category='error')
