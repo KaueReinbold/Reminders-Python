@@ -53,7 +53,7 @@ def home():
     return render_template('home.html', user=current_user)
 
 
-@views.route('/delete-note', methods=['POST'])
+@views.route('/delete-reminder', methods=['POST'])
 def delete_reminder():
     data = json.loads(request.data)
     id = data['id']
