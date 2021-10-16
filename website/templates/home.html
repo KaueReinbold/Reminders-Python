@@ -1,17 +1,39 @@
 {% extends 'index.html' %} {% block title %}Home{% endblock %}\ {% block content
 %}
-<h1>Notes</h1>
-<ul class="list-group list-group-flush" id="~notes">
-  {% for note in user.notes %}
-  <li class="list-group-item">
-    {{ note.text }}
-    <button type="button" class="close" onClick="deleteNote({{ note.id }})">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </li>
+<h1>Reminders</h1>
 
-  {% endfor %}
-</ul>
+<table class="table" id="remindersTable">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Title</th>
+      <th scope="col">Description</th>
+      <th scope="col">Limit Date</th>
+      <th scope="col">Is Done?</th>
+      <th scope="col">#</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for reminder in user.reminders %}
+    <tr>
+      <td scope="row">{{ reminder.id }}</td>
+      <td>{{ reminder.title }}</td>
+      <td>{{ reminder.description }}</td>
+      <td>{{ reminder.limit_date }}</td>
+      <td>{{ reminder.is_done }}</td>
+      <td>
+        <button
+          type="button"
+          class="close"
+          onClick="deleteNote({{ reminder.id }})"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
 <form method="post">
   <textarea class="form-control" name="note" id="note"></textarea>

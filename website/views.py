@@ -2,25 +2,50 @@ from flask import Blueprint, render_template, request, jsonify
 from flask.helpers import flash
 from flask_login import login_required, current_user
 import json
+import datetime
 
-from .models import Note
+from .models import Reminder
 from . import db
 
 views = Blueprint('views', __name__)
+
+
+def validate_date(date_text) -> datetime:
+    try:
+        return datetime.datetime.strptime(date_text, '%Y-%m-%d')
+    except ValueError:
+        return None
 
 
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
     if request.method == 'POST':
-        note_text = request.form.get('note')
+        title = request.form.get('title')
+        description = request.form.get('description')
+        limit_date = validate_date(request.form.get('limit_date'))
+        is_done = request.form.get('is_done') or False
 
-        if len(note_text) < 1:
-            flash('Note is too short!', category='error')
+        if len(title) < 1:
+            flash('Title is too short!', category='error')
+        elif len(title) > 50:
+            flash('Title is too long!', category='error')
+        elif len(description) < 1:
+            flash('Description is too short!', category='error')
+        elif len(description) > 200:
+            flash('Description is too long!', category='error')
+        elif limit_date == None:
+            flash("Incorrect data format, should be YYYY-MM-DD", category='error')
         else:
-            note = Note(text=note_text, user_id=current_user.id)
+            reminder = Reminder(
+                title=title,
+                description=description,
+                limit_date=limit_date,
+                is_done=is_done,
+                user_id=current_user.id
+            )
 
-            db.session.add(note)
+            db.session.add(reminder)
             db.session.commit()
 
             flash('Note added!', category='success')
@@ -29,14 +54,14 @@ def home():
 
 
 @views.route('/delete-note', methods=['POST'])
-def delete_note():
-    note = json.loads(request.data)
-    note_id = note['noteId']
-    note = Note.query.get(note_id)
+def delete_reminder():
+    data = json.loads(request.data)
+    id = data['id']
+    reminder = Reminder.query.get(id)
 
-    if note:
-        if note.user_id == current_user.id:
-            db.session.delete(note)
+    if reminder:
+        if reminder.user_id == current_user.id:
+            db.session.delete(reminder)
             db.session.commit()
 
     return jsonify({})
