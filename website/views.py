@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 import json
 import datetime
 
+from .repositories.reminderRepository import ReminderRepository
 from .models import Reminder
 from . import db
 
@@ -50,7 +51,11 @@ def home():
 
             flash('Reminder added!', category='success')
 
-    return render_template('home.html', user=current_user)
+    reminders = ReminderRepository.get_all_by_user_id(current_user.id)
+
+    print(type(reminders))
+
+    return render_template('home.html', user=current_user, reminders=reminders)
 
 
 @views.route('/delete-reminder', methods=['POST'])
