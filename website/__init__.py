@@ -1,3 +1,5 @@
+import redis
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -6,6 +8,12 @@ from os import path
 
 db = SQLAlchemy()
 DB_NAME = 'database.db'
+
+redis_db = redis.Redis(
+    host='localhost',
+    port=6379,
+    password='P@ssw0rd',
+    socket_timeout=1)
 
 
 def create_app():

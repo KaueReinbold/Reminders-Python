@@ -4,8 +4,7 @@ from flask_login import login_required, current_user
 import json
 import datetime
 
-from .models import Reminder
-from . import db
+from .repositories.reminderRepository import ReminderRepository
 
 views = Blueprint('views', __name__)
 
@@ -37,31 +36,26 @@ def home():
         elif limit_date == None:
             flash("Incorrect data format, should be YYYY-MM-DD", category='error')
         else:
-            reminder = Reminder(
-                title=title,
-                description=description,
-                limit_date=limit_date,
-                is_done=is_done,
-                user_id=current_user.id
+            ReminderRepository.save(
+                title,
+                description,
+                limit_date,
+                is_done,
+                current_user.id
             )
-
-            db.session.add(reminder)
-            db.session.commit()
 
             flash('Reminder added!', category='success')
 
-    return render_template('home.html', user=current_user)
+    reminders = ReminderRepository.get_all_by_user_id(current_user.id)
+
+    return render_template('home.html', user=current_user, reminders=reminders)
 
 
 @views.route('/delete-reminder', methods=['POST'])
 def delete_reminder():
     data = json.loads(request.data)
     id = data['id']
-    reminder = Reminder.query.get(id)
 
-    if reminder:
-        if reminder.user_id == current_user.id:
-            db.session.delete(reminder)
-            db.session.commit()
+    ReminderRepository.delete(current_user.id, id)
 
     return jsonify({})
