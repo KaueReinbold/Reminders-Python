@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 import json
 import datetime
 
-from src.data.repositories.reminderRepository import ReminderRepository
+from src.service.reminderService import ReminderService
 
 views = Blueprint('views', __name__)
 
@@ -25,28 +25,20 @@ def home():
         limit_date = validate_date(request.form.get('limit_date'))
         is_done = bool(request.form.get('is_done'))
 
-        if len(title) < 1:
-            flash('Title is too short!', category='error')
-        elif len(title) > 50:
-            flash('Title is too long!', category='error')
-        elif len(description) < 1:
-            flash('Description is too short!', category='error')
-        elif len(description) > 200:
-            flash('Description is too long!', category='error')
-        elif limit_date == None:
-            flash("Incorrect data format, should be YYYY-MM-DD", category='error')
+        result = ReminderService.save(
+            title=title,
+            description=description,
+            limit_date=limit_date,
+            is_done=is_done,
+            user_id=current_user.id
+        )
+
+        if result.is_valid:
+            flash(result.message, category='success')
         else:
-            ReminderRepository.save(
-                title,
-                description,
-                limit_date,
-                is_done,
-                current_user.id
-            )
+            flash(result.message, category='error')
 
-            flash('Reminder added!', category='success')
-
-    reminders = ReminderRepository.get_all_by_user_id(current_user.id)
+    reminders = ReminderService.get_all_by_user_id(current_user.id)
 
     return render_template('home.html', user=current_user, reminders=reminders)
 
@@ -56,6 +48,6 @@ def delete_reminder():
     data = json.loads(request.data)
     id = data['id']
 
-    ReminderRepository.delete(current_user.id, id)
+    ReminderService.delete(current_user.id, id)
 
     return jsonify({})
