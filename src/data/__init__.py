@@ -4,7 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from os import path
 
 db = SQLAlchemy()
-DB_NAME = 'database.db'
 
 redis_db = redis.Redis(
     host='localhost',
@@ -13,13 +12,13 @@ redis_db = redis.Redis(
     socket_timeout=1)
 
 
-def setup_data(app):
+def setup_data(app, database_path):
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{database_path}'
 
     db.init_app(app)
 
-    if not path.exists(DB_NAME):
+    if not path.exists(database_path):
         db.create_all(app=app)
         print('Created Database!')
 
