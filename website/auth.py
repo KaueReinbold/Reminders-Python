@@ -3,8 +3,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from src.data.models import User
-from src.data import db
+from src.data.repositories.userRepository import UserRepository
 
 auth = Blueprint('auth', __name__)
 
@@ -15,7 +14,7 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        user = User.query.filter_by(email=email).first()
+        user = UserRepository.get_by_email(email=email)
 
         if user and check_password_hash(user.password, password):
             login_user(user, remember=True)
@@ -45,7 +44,7 @@ def sign_up():
         password = request.form.get('password')
         passwordConfirmation = request.form.get('passwordConfirmation')
 
-        user = User.query.filter_by(email=email).first()
+        user = UserRepository.get_by_email(email=email)
 
         if user:
             flash('Email already taken.', category='error')
@@ -58,14 +57,11 @@ def sign_up():
         elif len(password) < 7:
             flash('Password must be at least 7 characters.', category='error')
         else:
-            new_user = User(
-                email=email,
-                first_name=first_name,
-                password=generate_password_hash(password, 'sha256')
+            new_user = UserRepository.save(
+                email,
+                first_name,
+                generate_password_hash(password, 'sha256')
             )
-
-            db.session.add(new_user)
-            db.session.commit()
 
             login_user(new_user, remember=True)
 

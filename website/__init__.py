@@ -1,8 +1,7 @@
-import redis
-
 from flask import Flask
 from flask_login import LoginManager
-from os import path
+
+from src.data.repositories.userRepository import UserRepository
 
 
 def create_app():
@@ -17,14 +16,12 @@ def create_app():
     app.register_blueprint(views, url_prefix="/")
     app.register_blueprint(auth, url_prefix="/")
 
-    from src.data.models import User, Reminder
-
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
     @login_manager.user_loader
     def load_user(id):
-        return User.query.get(int(id))
+        return UserRepository.get(id)
 
     return app
