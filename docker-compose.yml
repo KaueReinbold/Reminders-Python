@@ -1,8 +1,9 @@
 version: '3'
 
 services:
-  python-website-redis:
+  python-cache:
     image: redis
+    container_name: python-cache
     command: redis-server --requirepass P@ssw0rd
     ports:
       - "6379:6379"
