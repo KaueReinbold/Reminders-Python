@@ -5,8 +5,6 @@ import json
 import datetime
 
 from .repositories.reminderRepository import ReminderRepository
-from .models import Reminder
-from . import db
 
 views = Blueprint('views', __name__)
 
@@ -57,11 +55,7 @@ def home():
 def delete_reminder():
     data = json.loads(request.data)
     id = data['id']
-    reminder = Reminder.query.get(id)
 
-    if reminder:
-        if reminder.user_id == current_user.id:
-            db.session.delete(reminder)
-            db.session.commit()
+    ReminderRepository.delete(current_user.id, id)
 
     return jsonify({})
