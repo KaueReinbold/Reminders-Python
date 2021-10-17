@@ -38,22 +38,17 @@ def home():
         elif limit_date == None:
             flash("Incorrect data format, should be YYYY-MM-DD", category='error')
         else:
-            reminder = Reminder(
-                title=title,
-                description=description,
-                limit_date=limit_date,
-                is_done=is_done,
-                user_id=current_user.id
+            ReminderRepository.save(
+                title,
+                description,
+                limit_date,
+                is_done,
+                current_user.id
             )
-
-            db.session.add(reminder)
-            db.session.commit()
 
             flash('Reminder added!', category='success')
 
     reminders = ReminderRepository.get_all_by_user_id(current_user.id)
-
-    print(type(reminders))
 
     return render_template('home.html', user=current_user, reminders=reminders)
 
