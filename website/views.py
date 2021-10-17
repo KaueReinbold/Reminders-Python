@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 import json
 import datetime
 
-from .repositories.reminderRepository import ReminderRepository
+from src.data.repositories.reminderRepository import ReminderRepository
 
 views = Blueprint('views', __name__)
 

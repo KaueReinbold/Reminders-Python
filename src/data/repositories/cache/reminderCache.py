@@ -1,7 +1,8 @@
 import json
+
 from datetime import datetime
-from website import redis_db
-from website.models import Reminder
+from src.data import redis_db
+from src.data.models import Reminder
 
 
 def object_decoder(json_object):

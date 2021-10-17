@@ -1,6 +1,6 @@
-from website import db
+from src.data import db
 
-from website.models import Reminder
+from src.data.models import Reminder
 from .cache.reminderCache import ReminderCache
 
 
