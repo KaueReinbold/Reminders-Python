@@ -27,17 +27,33 @@ def row2dict(row):
 
 class ReminderCache:
     def exists(user_id) -> bool:
-        return redis_db.exists(user_id)
+        try:
+            return redis_db.exists(user_id)
+        except Exception as e:
+            print(e)
+            return False
 
-    def get(user_id):
-        redis_result = redis_db.get(user_id)
-        return json.loads(redis_result, object_hook=object_decoder)
+    def get(user_id) -> list[Reminder]:
+        try:
+            redis_result = redis_db.get(user_id)
+            return json.loads(redis_result, object_hook=object_decoder)
+        except Exception as e:
+            print(e)
+            return []
 
-    def set(user_id, reminders):
-        if len(reminders) > 0:
-            dict_reminders = list(map(row2dict, reminders))
-            json_list = json.dumps(dict_reminders)
-            redis_db.set(user_id, json_list)
+    def set(user_id, reminders) -> None:
+        try:
+            if len(reminders) > 0:
+                dict_reminders = list(map(row2dict, reminders))
+                json_list = json.dumps(dict_reminders)
+                redis_db.set(user_id, json_list)
+        except Exception as e:
+            print(e)
+            return None
 
-    def delete(user_id):
-        redis_db.delete(user_id)
+    def delete(user_id) -> None:
+        try:
+            redis_db.delete(user_id)
+        except Exception as e:
+            print(e)
+            return None

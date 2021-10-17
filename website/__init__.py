@@ -12,7 +12,8 @@ DB_NAME = 'database.db'
 redis_db = redis.Redis(
     host='localhost',
     port=6379,
-    password='P@ssw0rd')
+    password='P@ssw0rd',
+    socket_timeout=1)
 
 
 def create_app():
