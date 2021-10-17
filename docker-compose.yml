@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  python-website-redis:
+    image: redis
+    command: redis-server --requirepass P@ssw0rd
+    ports:
+      - "6379:6379"
